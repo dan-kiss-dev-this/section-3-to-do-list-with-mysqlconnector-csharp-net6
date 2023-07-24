@@ -69,6 +69,25 @@ namespace ToDoList.Models
             Id = id;
         }
 
+        public override bool Equals(System.Object otherItem)
+        {
+            if (!(otherItem is Item))
+            {
+                return false;
+            }
+            else
+            {
+                Item newItem = (Item)otherItem;
+                bool descriptionEquality = (this.Description == newItem.Description);
+                return descriptionEquality;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+
         // public override bool Equals(System.Object otherItem)
         // {
         //   if (!(otherItem is Item))
@@ -89,30 +108,30 @@ namespace ToDoList.Models
         //     return Id.GetHashCode();
         // }
 
-        // public void Save()
-        // {
-        //   MySqlConnection conn = new MySqlConnection(DBConfiguration.ConnectionString);
-        //   conn.Open();
-        //   MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+        public void Save()
+        {
+            MySqlConnection conn = new MySqlConnection(DBConfiguration.ConnectionString);
+            conn.Open();
+            MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
 
-        //   cmd.CommandText = "INSERT INTO items (description) VALUES (@ItemDescription);";
+            cmd.CommandText = "INSERT INTO items (description) VALUES (@ItemDescription);";
 
-        //   MySqlParameter param = new MySqlParameter();
-        //   param.ParameterName = "@ItemDescription";
-        //   param.Value = this.Description;
+            MySqlParameter param = new MySqlParameter();
+            param.ParameterName = "@ItemDescription";
+            param.Value = this.Description;
 
-        //   cmd.Parameters.Add(param);    
+            cmd.Parameters.Add(param);
 
-        //   cmd.ExecuteNonQuery();
+            cmd.ExecuteNonQuery();
 
-        //   Id = (int) cmd.LastInsertedId;
+            Id = (int)cmd.LastInsertedId;
 
-        //   conn.Close();
-        //   if (conn != null)
-        //   {
-        //     conn.Dispose();
-        //   }
-        // }
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+        }
 
         // public static Item Find(int id)
         // {
