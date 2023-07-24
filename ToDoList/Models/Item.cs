@@ -78,6 +78,7 @@ namespace ToDoList.Models
             else
             {
                 Item newItem = (Item)otherItem;
+                bool idEquality = (this.Id == newItem.Id);
                 bool descriptionEquality = (this.Description == newItem.Description);
                 return descriptionEquality;
             }
@@ -119,11 +120,11 @@ namespace ToDoList.Models
             MySqlParameter param = new MySqlParameter();
             param.ParameterName = "@ItemDescription";
             param.Value = this.Description;
-
             cmd.Parameters.Add(param);
 
             cmd.ExecuteNonQuery();
 
+            // need to typecast as long is returned by LastInsertedId
             Id = (int)cmd.LastInsertedId;
 
             conn.Close();
